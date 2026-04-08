@@ -18,10 +18,15 @@ export PATH="$HOME/neovim/build/bin:$PATH"
 
 
 
+# Dotfiles bare repo
+alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+
 # User specific aliases and functions
 #function grepn { grep -Ir --exclude-dir=.git --exclude-dir=.svn --include \*.4gl --include \*.per "N $@" ; }
 #function grepf { grep -Ir --exclude-dir=.git --exclude-dir=.svn --include \*.4gl --include \*.per "$@" ; }
 #function grepa { grep -Ir --exclude-dir=.git --exclude-dir=.svn "$@" ; }
+alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+
 function o4 { find -H $VDXDIR -name "$@*.4gl" -exec vim {} \; ;}
 
 
