@@ -78,6 +78,9 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
+# Disable bracketed-paste-magic to prevent double paste in tmux
+unset 'functions[bracketed-paste-magic]'
+zle -A .bracketed-paste bracketed-paste
 
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
