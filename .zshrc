@@ -78,6 +78,9 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
+# Disable bracketed-paste-magic to prevent double paste in tmux
+zle -N bracketed-paste self-insert-unmeta
+
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
@@ -128,6 +131,7 @@ export PATH="$HOME/neovim/build/bin:$PATH"
 
 alias vim='lvim'
 alias lvim="NVIM_APPNAME=lazyvim nvim"
+alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
 
 # User specific aliases and functions
