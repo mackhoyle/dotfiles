@@ -60,7 +60,7 @@ require("lazy").setup({
         ["<C-u>"] = { "scroll_documentation_up" },
       },
       completion = {
-        documentation = { auto_show = true },
+        documentation = { auto_show = true, animation = { duration = 0 } },
         ghost_text = { enabled = true },
       },
       sources = {
