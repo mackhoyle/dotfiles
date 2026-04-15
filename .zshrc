@@ -160,6 +160,7 @@ export PATH=$PATH:$HOME/dotnet
 
 # Start a new Claude Code task: creates worktree, tmux window, launches claude
 # Usage: task URMS-XXXXX [branch-name]
+#   If branch exists, checks it out. If not, creates it off 8.1.
 function task {
   local ticket="$1"
   local branch="$2"
@@ -182,11 +183,14 @@ function task {
     branch=$(git -C "$repo_root" branch -a --list "*${ticket}*" | head -1 | sed 's/^[ *]*//' | sed 's|remotes/origin/||')
   fi
 
-  if [ -z "$branch" ]; then
-    echo "No branch found for $ticket. Usage: task URMS-XXXXX branch-name"
-    return 1
+  # If branch exists, check it out; otherwise create a new one off 8.1
+  if [ -n "$branch" ]; then
+    git -C "$repo_root" worktree add "$wt_dir" "$branch"
+  else
+    git -C "$repo_root" worktree add -b "$ticket" "$wt_dir" 8.1
   fi
 
-  git -C "$repo_root" worktree add "$wt_dir" "$branch" && \
-  tmux new-window -n "$ticket" -c "$wt_dir" "claude"
+  if [ $? -eq 0 ]; then
+    tmux new-window -n "$ticket" -c "$wt_dir" "claude"
+  fi
 }
