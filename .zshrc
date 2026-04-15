@@ -157,3 +157,36 @@ function kx {
 # .NET SDK
 export DOTNET_ROOT=$HOME/dotnet
 export PATH=$PATH:$HOME/dotnet
+
+# Start a new Claude Code task: creates worktree, tmux window, launches claude
+# Usage: task URMS-XXXXX [branch-name]
+function task {
+  local ticket="$1"
+  local branch="$2"
+  local repo_root="$HOME/dev/usrms8.1"
+  local wt_dir="$repo_root-$ticket"
+
+  if [ -z "$ticket" ]; then
+    echo "Usage: task URMS-XXXXX [branch-name]"
+    return 1
+  fi
+
+  # If worktree already exists, just open it
+  if [ -d "$wt_dir" ]; then
+    tmux new-window -n "$ticket" -c "$wt_dir" "claude"
+    return 0
+  fi
+
+  # Find branch if not provided
+  if [ -z "$branch" ]; then
+    branch=$(git -C "$repo_root" branch -a --list "*${ticket}*" | head -1 | sed 's/^[ *]*//' | sed 's|remotes/origin/||')
+  fi
+
+  if [ -z "$branch" ]; then
+    echo "No branch found for $ticket. Usage: task URMS-XXXXX branch-name"
+    return 1
+  fi
+
+  git -C "$repo_root" worktree add "$wt_dir" "$branch" && \
+  tmux new-window -n "$ticket" -c "$wt_dir" "claude"
+}
