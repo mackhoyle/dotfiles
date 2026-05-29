@@ -45,3 +45,6 @@ function kx {
 }
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# opencode
+export PATH=/home/mhoyle/.opencode/bin:$PATH
