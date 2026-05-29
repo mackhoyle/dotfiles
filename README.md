@@ -6,9 +6,11 @@ Personal config files managed with a bare git repo.
 
 - `.tmux.conf` + `.tmux/scripts/` (tmux config + weather/status scripts)
 - `.config/nvim/` (Neovim/LazyVim config, LSP, plugins, keymaps)
-- `.vimrc` (vanilla vim fallback)
-- `.bashrc` / `.zshrc` (shell config, aliases, PATH)
+- `.zshrc` (shell config, aliases, PATH)
 - `.gitconfig` (delta pager, diff colors)
+
+Not tracked (machine-specific): `.bashrc` lives only on the legacy Genero
+server and is managed locally there. `.vimrc` removed in favor of Neovim.
 
 Plugins are managed by their respective tools (TPM for tmux, lazy.nvim for Neovim) and are not included.
 
@@ -48,7 +50,7 @@ nvim
 
 ## Managing dotfiles
 
-Add the alias to your shell (already in .bashrc/.zshrc):
+Add the alias to your shell (already in .zshrc; add manually to .bashrc if needed):
 
 ```bash
 alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
