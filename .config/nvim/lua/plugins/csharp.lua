@@ -37,7 +37,7 @@ return {
   -- Make sure the Roslyn LS and C# debugger are installed via Mason.
   {
     "mason-org/mason.nvim",
-    opts = { ensure_installed = { "roslyn", "netcoredbg" } },
+    opts = { ensure_installed = { "roslyn-language-server", "netcoredbg" } },
   },
 
   -- C# treesitter parser (no LazyVim lang.csharp extra is enabled).
