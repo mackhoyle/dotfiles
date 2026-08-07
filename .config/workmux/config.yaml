@@ -1,0 +1,7 @@
+nerdfont: true
+# Don't let workmux bake its own agent-status icon into window-status-format
+# per window — it snapshotted the Catppuccin-themed format when it first
+# tagged a window, so removing the theme left those specific windows stuck
+# with the old colors until manually cleared. Status is still visible via
+# `workmux list`/`workmux dashboard` without touching the tmux status line.
+status_format: false
