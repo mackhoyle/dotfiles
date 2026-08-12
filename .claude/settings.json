@@ -1,0 +1,118 @@
+{
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ \"$(tmux display-message -p '#{pane_id}')\" != \"$TMUX_PANE\" ] && tmux set-window-option -t \"$TMUX_PANE\" @claude_bell 1 2>/dev/null || true",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "mkdir -p /tmp/claude-tmux-state && printf waiting > \"/tmp/claude-tmux-state/${TMUX_PANE}.state\" 2>/dev/null || true",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "permission_prompt|elicitation_dialog",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "workmux set-window-status waiting"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import sys,json; d=json.load(sys.stdin); f=d.get('tool_input',{}).get('file_path','') or d.get('tool_response',{}).get('filePath',''); print(f)\" | { read -r f; case \"$f\" in /home/mhoyle/.tmux.conf|/home/mhoyle/.bashrc|/home/mhoyle/.zshrc|/home/mhoyle/.vimrc|/home/mhoyle/.gitconfig|/home/mhoyle/.config/nvim/*|/home/mhoyle/.tmux/scripts/*) git --git-dir=$HOME/.dotfiles --work-tree=$HOME add \"$f\" && git --git-dir=$HOME/.dotfiles --work-tree=$HOME commit -m \"update $(basename \"$f\")\" && git --git-dir=$HOME/.dotfiles --work-tree=$HOME push ;; esac; } 2>/dev/null || true",
+            "timeout": 30,
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "workmux set-window-status working"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ \"$(tmux display-message -p '#{pane_id}')\" != \"$TMUX_PANE\" ] && tmux set-window-option -t \"$TMUX_PANE\" @claude_bell 1 2>/dev/null || true",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "mkdir -p /tmp/claude-tmux-state && printf idle > \"/tmp/claude-tmux-state/${TMUX_PANE}.state\" 2>/dev/null || true",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash /home/mhoyle/.claude/hooks/tmux-window-summary.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "workmux set-window-status done"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p /tmp/claude-tmux-state && printf working > \"/tmp/claude-tmux-state/${TMUX_PANE}.state\" 2>/dev/null || true",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "workmux set-window-status working"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash /home/mhoyle/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "lua-lsp@claude-plugins-official": true,
+    "mattpocock-skills@mattpocock": true,
+    "superpowers@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "mattpocock": {
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills"
+      }
+    }
+  },
+  "effortLevel": "medium",
+  "tui": "fullscreen",
+  "editorMode": "vim"
+}
